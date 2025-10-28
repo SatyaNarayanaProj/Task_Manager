@@ -333,6 +333,146 @@ body {
 }
 
 /* =========================================
+  Modern Form Styles
+========================================= */
+
+/* General form container styling - use this for LoginPage and SignupPage */
+.auth-form-container {
+  background-color: #ffffff;
+  padding: 3rem;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px; /* Constrain width for a compact look */
+  margin: 2rem auto; /* Center the form with some top/bottom margin */
+  text-align: center;
+}
+
+.auth-form-container h2 {
+  font-size: 2.2rem;
+  color: #333;
+  margin-bottom: 2rem;
+  font-weight: 700;
+}
+
+.auth-form-container form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem; /* Spacing between form fields */
+}
+
+/* Modern Input Fields */
+.auth-form-container input[type="text"],
+.auth-form-container input[type="email"],
+.auth-form-container input[type="password"] {
+  width: 100%;
+  padding: 1.2rem 1.5rem; /* Larger padding for better touch targets */
+  border: 1px solid #e0e0e0; /* Softer border color */
+  border-radius: 8px; /* Slightly more rounded corners */
+  font-size: 1.1rem;
+  color: #333;
+  background-color: #f9f9f9; /* Light background for inputs */
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.auth-form-container input:focus {
+  border-color: #007AFF; /* Accent color on focus */
+  box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.2); /* Subtle glow on focus */
+  outline: none;
+  background-color: #fff; /* White background on focus */
+}
+
+/* Form labels */
+.auth-form-container label {
+  display: block; /* Ensure label is on its own line */
+  text-align: left;
+  margin-bottom: 0.5rem;
+  color: #555;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+/* Primary Button (already styled, but confirming it fits) */
+.btn-primary {
+  padding: 1.2rem 2rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  border-radius: 8px;
+  background-color: #007AFF;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+  margin-top: 1rem; /* Add some space above the button */
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+  transform: translateY(-1px);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-primary:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+  transform: none;
+  opacity: 0.8;
+}
+
+/* Links at the bottom of the form */
+.auth-form-container .form-link-text {
+  font-size: 1rem;
+  color: #555;
+  margin-top: 1.5rem;
+}
+
+.auth-form-container .form-link-text a {
+  color: #007AFF;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+.auth-form-container .form-link-text a:hover {
+  text-decoration: underline;
+  color: #0056b3;
+}
+
+/* Error messages */
+.form-error {
+  color: #dc3545;
+  font-size: 0.95rem;
+  margin-top: 1rem;
+  text-align: center;
+  font-weight: 500;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 480px) {
+  .auth-form-container {
+    margin: 0;
+    width: 100%;
+    max-width: none;
+    min-height: 100vh; /* Full height on very small screens */
+    border-radius: 0;
+    box-shadow: none;
+    padding: 2rem 1.5rem;
+  }
+
+  .auth-form-container h2 {
+    font-size: 2rem;
+  }
+
+  .btn-primary {
+    padding: 1rem 1.5rem;
+    font-size: 1.1rem;
+  }
+}
+
+/* =========================================
   Responsive Styles (Mobile-First)
 =========================================
 */
