@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'https://tasks-mo4a.onrender.com', // Your Go backend URL
+  baseURL: 'https://task-manager-2dsp.onrender.com', // Your Go backend URL
 });
 
 // Request interceptor to add the auth token to headers
