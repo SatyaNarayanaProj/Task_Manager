@@ -1,73 +1,78 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { signupUser } from '../api/api.js'; // <-- Added .js
+import { useNavigate, Link } from 'react-router-dom';
+import { useAuth } from '../hooks/useAuth.js';
 
 const SignupPage = () => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const [message, setMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false); // Add loading state
+  const auth = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    setMessage('');
-
+    setIsLoading(true); // Start loading
     try {
-      await signupUser({ username, email, password });
-      setMessage('Signup successful! Redirecting to login...');
-      
-      setTimeout(() => {
-        navigate('/login');
-      }, 2000);
-
+      await auth.signup(username, email, password);
+      navigate('/login'); // Redirect to login after successful signup
     } catch (err) {
       const errorMsg = err.response?.data?.error || 'Signup failed. Please try again.';
       setError(errorMsg);
+    } finally {
+      setIsLoading(false); // Stop loading regardless of success or failure
     }
   };
 
   return (
-    <div>
-      <h2>Sign Up</h2>
+    <div className="auth-form-container"> {/* Use the new container class */}
+      <h2>Sign Up</h2> {/* Larger, bolder heading */}
       <form onSubmit={handleSubmit}>
-        <div>
-          <label>Username:</label>
-          <input 
-            type="text" 
-            value={username} 
-            onChange={(e) => setUsername(e.target.value)} 
-            required 
+        <div> {/* Group label and input */}
+          <label htmlFor="username">Username:</label>
+          <input
+            id="username"
+            type="text"
+            placeholder="Enter your username" // Add a placeholder
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
           />
         </div>
         <div>
-          <label>Email:</label>
-          <input 
-            type="email" 
-            value={email} 
-            onChange={(e) => setEmail(e.target.value)} 
-            required 
+          <label htmlFor="email">Email:</label>
+          <input
+            id="email"
+            type="email"
+            placeholder="Enter your email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
           />
         </div>
         <div>
-  <label>Password:</label>
-  <input 
-    type="password" 
-    value={password} 
-    onChange={(e) => setPassword(e.target.value)} 
-    required 
-    minLength={6}  // <-- ADD THIS LINE
-  />
-</div>
-        
-        {error && <p style={{ color: 'red' }}>{error}</p>}
-        {message && <p style={{ color: 'green' }}>{message}</p>}
-
-        <button type="submit">Sign Up</button>
+          <label htmlFor="password">Password:</label>
+          <input
+            id="password"
+            type="password"
+            placeholder="Create a password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+        </div>
+        {error && <p className="form-error">{error}</p>} {/* Error message with class */}
+        <button 
+          type="submit" 
+          className="btn-primary" // Use btn-primary for styling
+          disabled={isLoading} // Disable during loading
+        >
+          {isLoading ? 'Signing Up...' : 'Sign Up'} {/* Loading text */}
+        </button>
       </form>
-      <p>
+      <p className="form-link-text"> {/* Use new class for link text */}
         Already have an account? <Link to="/login">Login here</Link>
       </p>
     </div>
