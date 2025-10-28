@@ -19,32 +19,32 @@ func main() {
 
 	// Setup CORS
 	router.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"https://task-manager-umber-pi.vercel.app"}, // your frontend URL
+		AllowOrigins:     []string{"http://localhost:5173", "http://localhost:3000"}, // your frontend URL
 		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
 		ExposeHeaders:    []string{"Content-Length"},
 		AllowCredentials: true,
 	}))
 
-// Public routes
-authGroup := router.Group("/auth")
-{
-    authGroup.POST("/signup", controllers.Signup()) 
-    authGroup.POST("/login", controllers.Login())  
-}
+	// Public routes
+	authGroup := router.Group("/auth")
+	{
+		authGroup.POST("/signup", controllers.Signup())
+		authGroup.POST("/login", controllers.Login())
+	}
 
-// Protected routes
-apiGroup := router.Group("/api")
-apiGroup.Use(middleware.AuthMiddleware())
-{
-    tasks := apiGroup.Group("/tasks")
-    {
-        tasks.POST("", controllers.CreateTask())   
-        tasks.GET("", controllers.GetTasks())     
-        tasks.PUT("/:id", controllers.UpdateTask())
-        tasks.DELETE("/:id", controllers.DeleteTask())
-    }
-}
+	// Protected routes
+	apiGroup := router.Group("/api")
+	apiGroup.Use(middleware.AuthMiddleware())
+	{
+		tasks := apiGroup.Group("/tasks")
+		{
+			tasks.POST("", controllers.CreateTask())
+			tasks.GET("", controllers.GetTasks())
+			tasks.PUT("/:id", controllers.UpdateTask())
+			tasks.DELETE("/:id", controllers.DeleteTask())
+		}
+	}
 	// Start server
 	log.Println("Starting server on :8080...")
 	err := router.Run(":8080")
