@@ -14,18 +14,15 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-// REMOVED: The "var userCollection = config.GetCollection("users")" line is GONE from here.
-// This is what fixes the panic.
 var validate = validator.New()
 
 func Signup() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		// ADDED: We get the collection *inside* the function, after the DB is connected.
-		var userCollection = config.GetCollection("users")
+		var userCollection = config.GetCollection("users") 
 		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
-		var user models.User
 
+		var user models.User
 		if err := c.BindJSON(&user); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
@@ -44,7 +41,7 @@ func Signup() gin.HandlerFunc {
 
 		hashedPassword, _ := services.HashPassword(user.Password)
 		user.Password = hashedPassword
-		user.ID = primitive.NewObjectID() // Set a new ID
+		user.ID = primitive.NewObjectID()
 
 		result, err := userCollection.InsertOne(ctx, user)
 		if err != nil {
@@ -58,10 +55,10 @@ func Signup() gin.HandlerFunc {
 
 func Login() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		// ADDED: We get the collection *inside* the function.
-		var userCollection = config.GetCollection("users")
+		var userCollection = config.GetCollection("users") 
 		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
+
 		var user models.User
 		var foundUser models.User
 
