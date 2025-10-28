@@ -53,12 +53,11 @@ go mod tidy
 # 4. Run the Go server
 go run main.go
 The backend should output: Connected to MongoDB! and Starting server on :8080...
-
-Step 2: Frontend Setup (React UI)
+```
+### Step 2: Frontend Setup (React UI)
 Open your second terminal and run these commands:
 
-Bash
-
+``` bash
 # 1. Navigate into the frontend directory
 cd task-manager-frontend
 
@@ -67,3 +66,10 @@ npm install
 
 # 3. Run the React development server
 npm run dev -- --port 3000
+```
+## User-Interface
+
+<img width="616" height="684" alt="Screenshot 2025-10-28 232404" src="https://github.com/user-attachments/assets/367ae865-0e7b-4f66-b2db-59e54f20f8ee" />
+
+<img width="999" height="638" alt="Screenshot 2025-10-28 232442" src="https://github.com/user-attachments/assets/0f49cf5e-4cac-448c-a176-a48852c7eb3b" />
+
