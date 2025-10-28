@@ -5,13 +5,18 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/gin-gonic/gin" // <-- 1. IMPORT VALIDATOR
+	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10" // <-- CORRECT VALIDATOR IMPORT ADDED
 	"github.com/yourusername/task-manager/config"
 	"github.com/yourusername/task-manager/models"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
+// Global variable initialization for validation. This is assumed to be defined once in the controllers package.
+var val = validator.New()
+
+// --- CREATE TASK ---
 func CreateTask() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var taskCollection = config.GetCollection("tasks")
@@ -26,7 +31,7 @@ func CreateTask() gin.HandlerFunc {
 		}
 
 		// 2. Validate input
-		if err := validate.Struct(task); err != nil { // <-- This will now work
+		if err := val.Struct(task); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
@@ -35,7 +40,7 @@ func CreateTask() gin.HandlerFunc {
 		userIDStr, _ := c.Get("userId")
 		userID, _ := primitive.ObjectIDFromHex(userIDStr.(string))
 
-		task.ID = primitive.NewObjectID() // Set new ID
+		task.ID = primitive.NewObjectID()
 		task.UserID = userID
 		task.Completed = false
 
@@ -50,6 +55,7 @@ func CreateTask() gin.HandlerFunc {
 	}
 }
 
+// --- READ TASKS ---
 func GetTasks() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var taskCollection = config.GetCollection("tasks")
@@ -74,7 +80,7 @@ func GetTasks() gin.HandlerFunc {
 			return
 		}
 
-		// Handle case where user has no tasks
+		// Handle case where user has no tasks (return empty array instead of nil)
 		if tasks == nil {
 			tasks = []models.Task{}
 		}
@@ -83,6 +89,7 @@ func GetTasks() gin.HandlerFunc {
 	}
 }
 
+// --- UPDATE TASK ---
 func UpdateTask() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var taskCollection = config.GetCollection("tasks")
@@ -91,7 +98,7 @@ func UpdateTask() gin.HandlerFunc {
 
 		// 1. Get task ID from URL
 		taskID, _ := primitive.ObjectIDFromHex(c.Param("id"))
-		// 2. Get user ID from context
+		// 2. Get user ID from context (ensures ownership check)
 		userID, _ := primitive.ObjectIDFromHex(c.MustGet("userId").(string))
 
 		// 3. Bind JSON for updates
@@ -101,11 +108,11 @@ func UpdateTask() gin.HandlerFunc {
 			return
 		}
 
-		// Security: Don't allow changing ownership or ID
+		// Security: Prevent unauthorized changes to ownership or ID
 		delete(updates, "userId")
 		delete(updates, "_id")
 
-		// 4. Create filter to update task ONLY if it belongs to the user
+		// 4. Create filter (Ownership Check)
 		filter := bson.M{
 			"_id":    taskID,
 			"userId": userID,
@@ -129,6 +136,7 @@ func UpdateTask() gin.HandlerFunc {
 	}
 }
 
+// --- DELETE TASK ---
 func DeleteTask() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var taskCollection = config.GetCollection("tasks")
@@ -139,7 +147,7 @@ func DeleteTask() gin.HandlerFunc {
 		taskID, _ := primitive.ObjectIDFromHex(c.Param("id"))
 		userID, _ := primitive.ObjectIDFromHex(c.MustGet("userId").(string))
 
-		// 2. Create filter to ensure user ownership
+		// 2. Create filter (Ownership Check)
 		filter := bson.M{
 			"_id":    taskID,
 			"userId": userID,
