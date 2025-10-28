@@ -26,26 +26,25 @@ func main() {
 		AllowCredentials: true,
 	}))
 
-	// Public routes
-	authGroup := router.Group("/auth")
-	{
-		authGroup.POST("/signup", controllers.Signup) 
-		authGroup.POST("/login", controllers.Login)
-	}
+// Public routes
+authGroup := router.Group("/auth")
+{
+    authGroup.POST("/signup", controllers.Signup()) 
+    authGroup.POST("/login", controllers.Login())  
+}
 
-	// Protected routes
-	apiGroup := router.Group("/api")
-	apiGroup.Use(middleware.AuthMiddleware()) 
-	{
-		tasks := apiGroup.Group("/tasks")
-		{
-			tasks.POST("", controllers.CreateTask)       
-			tasks.GET("", controllers.GetTasks)         
-			tasks.PUT("/:id", controllers.UpdateTask)    
-			tasks.DELETE("/:id", controllers.DeleteTask) 
-		}
-	}
-
+// Protected routes
+apiGroup := router.Group("/api")
+apiGroup.Use(middleware.AuthMiddleware())
+{
+    tasks := apiGroup.Group("/tasks")
+    {
+        tasks.POST("", controllers.CreateTask())   
+        tasks.GET("", controllers.GetTasks())     
+        tasks.PUT("/:id", controllers.UpdateTask())
+        tasks.DELETE("/:id", controllers.DeleteTask())
+    }
+}
 	// Start server
 	log.Println("Starting server on :8080...")
 	err := router.Run(":8080")
