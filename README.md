@@ -67,6 +67,15 @@ npm install
 # 3. Run the React development server
 npm run dev -- --port 3000
 ```
+
+## Step 3:Open MongoDB Compass
+After clicking on the mongodb compass you would be seeing like this 
+<img width="389" height="558" alt="image" src="https://github.com/user-attachments/assets/9a774adc-caeb-4c21-b919-b35b77dbc427" />
+
+Now u have to click on the connect button and u can establish the connection
+<img width="612" height="651" alt="image" src="https://github.com/user-attachments/assets/80d18b2c-efcd-4d6c-8924-d48956cbd060" />
+
+
 ## User-Interface
 
 <img width="616" height="684" alt="Screenshot 2025-10-28 232404" src="https://github.com/user-attachments/assets/367ae865-0e7b-4f66-b2db-59e54f20f8ee" />
