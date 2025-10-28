@@ -68,7 +68,8 @@ npm install
 npm run dev -- --port 3000
 ```
 
-## Step 3:Open MongoDB Compass
+## Step 3 :Open MongoDB Compass
+
 After clicking on the mongodb compass you would be seeing like this 
 <img width="389" height="558" alt="image" src="https://github.com/user-attachments/assets/9a774adc-caeb-4c21-b919-b35b77dbc427" />
 
