@@ -19,7 +19,7 @@ func main() {
 
 	// Setup CORS
 	router.Use(cors.New(cors.Config{
-    AllowOrigins:     []string{"https://task-manager-seven-weld-99.vercel.app"}, 
+		AllowOrigins:     []string{"https://task-manager-seven-weld-99.vercel.app"}, // your frontend URL
 		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
 		ExposeHeaders:    []string{"Content-Length"},
@@ -29,24 +29,27 @@ func main() {
 	// Public routes
 	authGroup := router.Group("/auth")
 	{
-		authGroup.POST("/signup", controllers.Signup())
-		authGroup.POST("/login", controllers.Login())
+		authGroup.POST("/signup", controllers.Signup) 
+		authGroup.POST("/login", controllers.Login)
 	}
 
 	// Protected routes
 	apiGroup := router.Group("/api")
-	apiGroup.Use(middleware.AuthMiddleware()) // Apply JWT auth middleware
+	apiGroup.Use(middleware.AuthMiddleware()) 
 	{
 		tasks := apiGroup.Group("/tasks")
 		{
-			tasks.POST("", controllers.CreateTask())       // POST /api/tasks
-			tasks.GET("", controllers.GetTasks())          // GET /api/tasks
-			tasks.PUT("/:id", controllers.UpdateTask())    // PUT /api/tasks/:id
-			tasks.DELETE("/:id", controllers.DeleteTask()) // DELETE /api/tasks/:id
+			tasks.POST("", controllers.CreateTask)       
+			tasks.GET("", controllers.GetTasks)         
+			tasks.PUT("/:id", controllers.UpdateTask)    
+			tasks.DELETE("/:id", controllers.DeleteTask) 
 		}
 	}
 
 	// Start server
 	log.Println("Starting server on :8080...")
-	router.Run(":8080")
+	err := router.Run(":8080")
+	if err != nil {
+		log.Fatalf("Failed to start server: %v", err)
+	}
 }
