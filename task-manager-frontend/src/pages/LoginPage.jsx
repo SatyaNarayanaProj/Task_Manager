@@ -1,35 +1,32 @@
-// src/pages/LoginPage.jsx
-
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { useAuth } from '../hooks/useAuth.js';
+import { useAuth } from '../hooks/useAuth.js'; 
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const [isLoading, setIsLoading] = useState(false); 
+  const [isLoading, setIsLoading] = useState(false);
   const auth = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    setIsLoading(true); // Start loading
+    setIsLoading(true);
     try {
       await auth.login(email, password);
       navigate('/');
     } catch (err) {
       const errorMsg = err.response?.data?.error || 'Invalid email or password';
       setError(errorMsg);
-    } finally {
-      setIsLoading(false);
+      setIsLoading(false); 
     }
   };
 
   return (
-    <div className="auth-form-container"> 
-      <h2>Login</h2> 
+    <div className="auth-form-container">
+      <h2>Login</h2>
       <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor="email">Email:</label>
@@ -51,12 +48,15 @@ const LoginPage = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
+            minLength={6}
           />
         </div>
+        
         {error && <p className="form-error">{error}</p>}
-        <button 
-          type="submit" 
-          className="btn-primary" 
+
+        <button
+          type="submit"
+          className="btn-primary"
           disabled={isLoading}
         >
           {isLoading ? 'Logging In...' : 'Login'}
