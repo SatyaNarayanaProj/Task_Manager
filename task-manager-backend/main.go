@@ -19,7 +19,7 @@ func main() {
 
 	// Setup CORS
 	router.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"https://task-manager-seven-weld-99.vercel.app"}, // your frontend URL
+		AllowOrigins:     []string{"https://task-manager-umber-pi.vercel.app"}, // your frontend URL
 		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
 		ExposeHeaders:    []string{"Content-Length"},
